@@ -15,37 +15,70 @@
 #include <vector>
 #include <algorithm> 
 #include <set>
+// #include <bits/stdc++.h>
 using namespace std;
 
-struct Point {
-    int x; 
-    int y; 
-};
-
-bool compareElems(const Point &p1, const Point &p2) {
-    if (p1.x == p2.x) {
-        return p1.y < p2.y;
-    }
-    return p1.x < p2.x;
-}
 
 int main() {
   int n;
   cin>>n;
-  vector<Point> elems(n);
-
+  vector<int> xElems(n);
+  vector<int> yElems(n);
+  vector<int> xElems1(n);
+  vector<int> yElems1(n);
+  
   for (int i = 0; i<n;i++ ){
-    int x;
-    int y;
-    cin>>x;
-    cin>>y;
-    elems[i]={x,y};
+    cin>>xElems[i];
+    cin>>yElems[i];
+    xElems1[i]=xElems[i];
+    yElems1[i]=yElems[i];
   }
-  sort(elems.begin(), elems.end(), compareElems);
+  sort(xElems.begin(),xElems.end());
+  sort(yElems.begin(),yElems.end());
+  int maxX = xElems[n-1]- xElems[0];
+  int maxY = yElems[n-1]- yElems[0];
+  long long maxArea = (long long) maxY * maxX;
+  long long s3= maxArea;
 
-  
+  for(int i = 0 ; i< n ; i++){
+    int curX= xElems1[i];
+    for(int j = 0 ; j< n ; j++){
+        int curY= yElems1[j];
+        int lowestX=xElems[n-1];
+        int lowestY=yElems[n-1];
+       
+        for(int k = 0;k < n;k++){
+            if(xElems1[k]<=curX&& yElems1[k]>curY){
+                lowestX = min(lowestX, xElems1[k]);
+            }
+            else if(xElems1[k]>curX){
+                lowestX = min(lowestX, xElems1[k]);
+            }
+        }
+        for(int k = 0;k < n;k++){
+            if(yElems1[k]<=curY&& xElems1[k]>curX){
+                lowestY = min(lowestY, yElems1[k]);
+            }
+            else if(yElems1[k]>curY){
+                lowestY = min(lowestY, yElems1[k]);
+            }
+            
+        }
+        long long s1 =(long long) (yElems[n-1]-lowestY) * (xElems[n-1]-lowestX);
+        long long s2 = (long long)(curX - xElems[0])* (curY - yElems[0]);
+        // cout << "Current s1: " << s1 << " Coordinates: X: " << lowestX << ", Y: " << lowestY << endl;
+        // cout << "Current s2: " << s2 << " Coordinates: X: " << curX << ", Y: " << curY << endl;
+        if(s3>s1+s2){
+             s3 = s1+s2;
+        }
 
-  
+    }
+  }
+  cout<<maxArea-s3<<endl;
+
+
+
+
   return 0;
   
   
