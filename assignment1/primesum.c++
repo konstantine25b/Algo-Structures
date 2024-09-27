@@ -11,7 +11,7 @@
 #include <algorithm> 
 #include <set>
 using namespace std;
-
+ 
 void findPrimesUpTo(int maxLimit, vector<int> &primeNumbers) {
     vector<bool> primeFlags(maxLimit + 1, true);
     primeFlags[0] = primeFlags[1] = false;
@@ -22,26 +22,25 @@ void findPrimesUpTo(int maxLimit, vector<int> &primeNumbers) {
             }
         }
     }
-
+ 
     for (int k = 2; k <= maxLimit; ++k) {
         if (primeFlags[k]) {
             primeNumbers.push_back(k);
         }
     }
 }
-
+ 
 int main() {
   int n;
   cin>>n;
-
-  int N = 50005;
+ 
+  
   vector<int> primes;
-  findPrimesUpTo(2*n, primes);
-  int mod;
-  set<int> primeSet;
-
+  findPrimesUpTo(n+22, primes);
+  int mod=1;
+  
+ 
   for(int i = 0 ;i<primes.size(); i++){
-    primeSet.insert(primes[i]);
     if(primes[i]>n){
         mod= primes[i];
         break;
@@ -53,7 +52,6 @@ int main() {
     for (int i =0 ; i< primes.size() ; i++) {
         if(primes[i]==n) continue;
         for (int j = primes[i]; j <= n; j++) {
-            
             dp[j] = (dp[j] + dp[j - primes[i]])%mod;
         }
     }
