@@ -83,3 +83,98 @@ int main() {
   
   
 }
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void fillVector(int N, vector<int>& primes){
+    vector<bool> isPrime(N+1, true);
+
+    isPrime[0] = false;
+    isPrime[1] = false;
+
+    for(int i = 2; i * i <= N; i++){
+        if(isPrime[i]){
+            for(int j = i * i; j <= N; j = j + i){
+                isPrime[j] = false;
+            }
+        }
+    }
+
+    for(int i = 2; i <= N; i++){
+        if(isPrime[i] == true){
+            primes.push_back(i);
+        }
+    }
+    
+}
+
+int countSumN(int N, vector<int> primes, int smallestGreaterPrime) {
+    vector<int> dp(N + 1, 0);
+    dp[0] = 1; 
+        
+   
+    for (int prime : primes) {
+        if(prime==N) continue;
+        for (int j = prime; j <= N; ++j) {
+            dp[j] = (dp[j] + dp[j - prime])%smallestGreaterPrime;
+        }
+    }
+
+
+    return dp[N];
+}
+
+bool isPrime(int num) {
+    if (num <= 1) return false; 
+    for (int i = 2; i * i <= num; i++) {
+        if (num % i == 0) return false; 
+    }
+    return true;
+}
+
+
+int findNext(int N) {
+    int next = N + 1; 
+    while (!isPrime(next)) {
+        next++;
+    }
+    return next;
+}
+
+int main(){
+
+    int N;
+    cin >> N;
+
+    if (N <= 1) {
+        cout << 0 << endl;
+        return 0;
+    }
+
+    vector<int> primes;
+
+    fillVector(N, primes);
+    // cout<<"array :"<<endl;
+    //  for(int i = 0; i < primes.size(); i++){
+    //     cout<<primes[i]<<endl;
+    //  }
+
+    int smallestGreaterPrime = findNext(N);
+
+    int sum = countSumN(N, primes, smallestGreaterPrime);
+
+   
+   
+    int ans = sum % smallestGreaterPrime;
+
+    // cout<<"sum and P"<<endl;
+    //  cout << sum << endl;
+    //  cout << smallestGreaterPrime << endl;
+
+    cout << ans << endl;
+
+    return 0;
+}
